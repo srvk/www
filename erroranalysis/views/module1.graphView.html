@@ -1,0 +1,344 @@
+<div class="container" id="module1-container">
+  <h3>
+    <a href="#a-histograms" id="a-histograms">
+      #
+    </a>
+    Data Selection
+  </h3>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <h4>
+        <a href="#a-histo-demographics" id="a-histo-demographics">
+          #
+        </a>
+        Demographics
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span3">
+          <div id="gradelevel-chart" class="speech-chart">
+            <div class="title">
+              Grade
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[0].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <h4>
+        <a href="#a-histo-audio-properties" id="a-histo-audio-properties">
+          #
+        </a>
+        Audio properties
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="snr-chart" class="speech-chart">
+            <div class="title">
+              SNR
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[6].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="spr-chart" class="speech-chart">
+            <div class="title">
+              SPR
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[7].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="score-chart" class="speech-chart">
+            <div class="title">
+              Pronunciation score
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[8].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="f0-chart" class="speech-chart">
+            <div class="title">
+              F0
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[2].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="f1-chart" class="speech-chart">
+            <div class="title">
+              F1
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[3].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="f2-chart" class="speech-chart">
+            <div class="title">
+              F2
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[4].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="f3-chart" class="speech-chart">
+            <div class="title">
+              F3
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[5].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="intensity-chart" class="speech-chart">
+            <div class="title">
+              Intensity
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[1].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <h4>
+        <a href="#a-histo-results" id="a-histo-results">
+          #
+        </a>
+        Results
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="accuracy-chart" class="speech-chart">
+            <div class="title">
+              Accuracy
+              <span class="reset" style="display: none"> | Filtering: <span class="filter"></span> | </span>
+              <a class="reset" href="javascript:graphArray[9].filterAll();dc.redrawAll();" style="display: none">reset</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <h3>
+    <a href="#a-accuracy-graphs" id="a-accuracy-graphs">
+      #
+    </a>
+    Accuracy Graphs
+  </h3>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <div id="a-accuracy-graphs-legends">Legends</div>
+      <div>
+        <span>
+          <svg height="20" width="50" version="1.1">
+            <line x1="2" y1="10" x2="48" y2="10" stroke="steelblue" stroke-width="10">
+          </svg>
+        </span>&nbsp;&nbsp;Number of audio files
+      </div>
+      <div>
+        <span>
+          <svg height="20" width="50" version="1.1">
+            <line x1="2" y1="10" x2="48" y2="10" stroke="green" stroke-width="10">
+          </svg>
+        </span>&nbsp;&nbsp;Accuracy
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <h4>
+        <a href="#a-accuracy-graphs-demographics" id="a-accuracy-graphs-demographics">
+          #
+        </a>
+        Demographics
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span3">
+          <div id="accuracy-gradelevel-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. Grade
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <h4>
+        <a href="#a-accuracy-graphs-audio-properties" id="a-accuracy-graphs-audio-properties">
+          #
+        </a>
+        Audio properties
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="accuracy-snr-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. SNR
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="accuracy-spr-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. SPR
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="accuracy-score-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. Pronunciation
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="accuracy-f0-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. F0
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="accuracy-f1-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. F1
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="accuracy-f2-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. F2
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span6">
+          <div id="accuracy-f3-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. F3
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="accuracy-intensity-chart" class="speech-chart">
+            <div class="title">
+              Accuracy vs. Intensity
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <h4>
+        <a href="#a-audio-files-count" id="a-audio-files-count">
+          #
+        </a>
+        Audio Files Count
+      </h4>
+      <div id="audio-files-count">
+        <span class="filter-count"></span> selected out of <span class="total-count"></span> records |
+        <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="span12">
+      <h4>
+        <a href="#a-audio-files" id="a-audio-files">
+          #
+        </a>
+        Audio Files
+      </h4>
+      <table id="speech-table" class="table table-hover">
+        <thead>
+          <tr class="header">
+            <th>Filename</th>
+            <th>SNR</th>
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>

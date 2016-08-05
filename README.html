@@ -1,0 +1,183 @@
+<h1>eesen-transcriber</h1>
+
+<p>This Virtual Machine implements a system that can transcribe and/ or sub-title pretty much any audio or video file. It will separate speech from non-speech, identify individual speakers, and then convert speech to text. It supports various input and output formats. If you give it a full corpus of files to transcribe, it allows you to browse and search the results.</p>
+
+<p>If the results are not good, it is easy to update and change several parts of the system, for example the segmentation parameters (not enough words in the output? too much noise?) or the language model (crappy output)?</p>
+
+<p>Internally, the system
+uses <a href="https://github.com/yajiemiao/eesen">EESEN</a> RNN-based decoding, trained on
+the <a href="http://www-lium.univ-lemans.fr/en/content/ted-lium-corpus">TED-LIUM</a> dataset and the Cantab-TEDLIUM <a href="http://cantabresearch.com/cantab-TEDLIUM.tar.bz2">language model</a> from
+Cantab Research. In addition it includes an adapted version of
+Tanel Alumae's <a href="https://github.com/alumae/kaldi-offline-transcriber">Kaldi Offline Transcriber</a> which accepts most any audio/
+video format and produces transcriptions as subtitles, plain text, and more.
+Within transcriber, <a href="http://www-lium.univ-lemans.fr/diarization/doku.php/welcome">LIUM speaker diarization</a> is performed.
+Lastly, the VM provides a video browser in a web page such that transcriptions appear as video subtitles, and are searchable by keyword across videos.</p>
+
+<p>This VM runs either locally with VirtualBox or remotely as an Amazon Machine Image on AWS.</p>
+
+<p>If you have gotten this far, it is assumed you have cloned this repository (<code>git clone http://github.com/srvk/eesen-transcriber</code>), and have opened a shell in the <code>eesen-transcriber</code> working directory:</p>
+
+<h4>Running with VirtualBox Provider</h4>
+
+<p>Assuming you have installed <a href="http://vagrantup.com">Vagrant</a>, from the shell in the <code>eesen-transcriber</code> folder type:</p>
+
+<pre><code>vagrant up
+</code></pre>
+
+<p><a href="https://github.com/srvk/eesen-transcriber/wiki/TranscribeOutput">Lots of output</a> will follow, as things download and install. If you get warnings about retrying, please be patient as this can take up to 5 minutes. You should then be able to try out the transcriber with the supplied test audio file: </p>
+
+<pre><code>vagrant ssh -c "vids2web.sh /vagrant/test2.mp3"
+</code></pre>
+
+<p>If all goes well you can see results at the URL <code>http://192.168.56.101</code>. This is a shorthand way of running commands in the virtual machine (guest) from the host computer. It accomplishes the same thing as several steps:</p>
+
+<ul>
+<li>vagrant ssh (log into the virtual machine with automatic username/password pair vagrant/vagrant)</li>
+<li>cd tools/eesen-offline-transcriber (this is on the search path, the home folder for transcribing)</li>
+<li>./vids2web /vagrant/test2.mp3 (transcribe audios/videos and update the web results page)
+You might notice that once logged into the VM, all the files that were in your host computer working directory are visible in the folder /vagrant. This is a convenient way to store many large input and output files on the host without running out of space in the guest VM. You will see several more scripts from the <a href="https://github.com/srvk/srvk-eesen-offline-transcriber/blob/master/README.md">transcriber core system</a> which support different transcription methods.</li>
+</ul>
+
+<h4>Running with AWS Provider</h4>
+
+<p>You will need to have already an <a href="http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/AboutAWSAccounts.html">Amazon Web Services account</a>. You will need to know several details about your account:</p>
+
+<ul>
+<li>The name and path of an <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">AWS public key pair</a> used for secure login</li>
+<li>Your <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">AWS Key and Secret Key</a></li>
+<li>An <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html">AWS Security Group</a> configured for both SSH and HTTP</li>
+</ul>
+
+<p>Before provisioning the VM, you need to install the two Vagrant plugins:</p>
+
+<pre><code>vagrant plugin install vagrant-aws
+vagrant plugin install vagrant-sshfs
+</code></pre>
+
+<p><a href="https://github.com/dustymabe/vagrant-sshfs">Info about sshfs plugin</a> You will also need to fill in details from your Amazon Web Services account by editing the file <code>aws.sh</code> and then executing it as</p>
+
+<pre><code>. aws.sh
+</code></pre>
+
+<p>You also need to enable SSH sharing of local files. On Mac OSX:</p>
+
+<pre><code>sudo systemsetup -setremotelogin on
+</code></pre>
+
+<p>on Ubuntu Linux:</p>
+
+<pre><code>sudo apt-get install ssh
+</code></pre>
+
+<p>Then you can run <code>vagrant up</code> as above, and when prompted, supply the password for your current login account. This gives it to the VM so that it can use sshfs to mount the working directory of your local filesystem as a Vagrant synced filesystem visible from the VM as <code>/vagrant</code>. This allows inputs as well as results to reside on your host. Make note of the URL given at the finish of <code>vagrant up</code> - if you transcribe the test audio as above,
+(<code>vagrant ssh -c "vids2web.sh /vagrant/test2.mp3"</code>) you should be able to see results at this URL.</p>
+
+<h4>Customizing the VM</h4>
+
+<p>You can also log directly into the VM with <code>vagrant ssh</code> and look around. For example, change directories to <code>/home/vagrant/tools/eesen-offline-transcriber</code> to find README instructions there. You can initiate transcription from here with <code>speech2text.sh</code> and output will appear in <code>build/output</code>. You can run scripts that queue several files for transcription with <code>batch.sh</code></p>
+
+<p>Note that the size of the VM is controlled by the Vagrantfile, and asks for 2 CPUs and 8GB RAM:</p>
+
+<pre><code>vbox.cpus = 2
+vbox.memory = 8192
+</code></pre>
+
+<p>This supports transcribing of audio/video files with small utterance lengths*. But for long utterances you may need to crank this to 8-12 GB, which means your host computer may need as much as 16 GB. Either you will need more RAM on the host you run locally using VirtualBox, or you will need to specify a more powerful <code>aws.instance.type</code> in Vagrantfile. <a href="https://aws.amazon.com/ec2/instance-types/">AWS Instance Types</a> Similarly, if you want to transcribe several things in parallel, you'll want to crank up the number pf <code>Procs</code> at the end of <code>/etc/slurm-llnl/slurm.conf</code> as well as increasing the RAM allocated to the VM. An example, setting CPUs to 8, RAM to 30000, and Procs to 7 seems to work pretty well on a 32 GB 8 core host. </p>
+
+<p>cd /home/vagrant/tools/eesen-offline-transcriber
+Initiate transcription of the test file test2.mp3 with ./speech2text.sh /vagrant/test2.mp3
+Output should appear in build/output/test2.*</p>
+
+<h4>Watched Folder Automatic Transcription</h4>
+
+<p>The VM watches the shared host folder <code>transcribe_me</code>. Any files placed in this folder get queued as transcription jobs, and results appear in the same folder with extension <code>.ctm</code>. Results also automatically populate the video browser web page. Log files appear in <code>log/</code> by job number. If you want to disable this behavior, comment out the line in <code>Vagrantfile</code> that runs <code>watch.sh</code> before running <code>vagrant up</code>, or kill the watch.sh process in the VM.</p>
+
+<p>The default segmentation strategy done by LIUM is <code>show.seg</code> but we override it in <code>Makefile.options</code> with <code>show.s.seg</code> to produce the maximum number of small segments, with the side effect of also assuming there is only one speaker.  (no per-speaker MFCC calculations) </p>
+
+<p>If you can provide your own segmentation, this may
+improve upon the default LIUM segmenter that is part of EESEN transcriber.</p>
+
+<ol>
+<li><p>In the VM, path to <code>/home/vagrant/tools/eesen-offline-transcriber</code></p></li>
+<li><p>Place a video or audio file and segmentation file in folder <code>src-audio/</code>,
+with the same base name, and extensions <code>.mp4</code> and <code>.seg</code>, e.g. for base name <code>myvideo</code></p>
+
+<p>src-audio/myvideo.mp4 
+src-audio/myvideo.seg</p></li>
+</ol>
+
+<p>The <code>.seg</code> segmentation file you provide must have the format:</p>
+
+<p>column 1 is the base name of the video file,
+  column 2 is always “1”
+  column 3 is the start time of the segment in hundredths of a second
+  column 4 is the length of the segment in hundredths of a second
+  the remaining columns are always “U U U S0″</p>
+
+<p>Example <code>myvideo.seg</code>:</p>
+
+<p>HVC037 1 4 2770 U U U S0 
+  HVC037 1 2774 490 U U U S0 
+  HVC037 1 3264 12930 U U U S0</p>
+
+<ol>
+<li><p>Run the script <code>run-segmented.sh</code> with the basename as an argument, e.g.:</p>
+
+<p>./run-segmented.sh HVC037</p></li>
+</ol>
+
+<p>This produces by default subtitle <code>.srt</code> files. If you want another format, edit the
+last line of <code>run-segmented.sh</code> to specify the desired extension.</p>
+
+<h5>Scoring</h5>
+
+<p>Standard NIST sclite scoring is supported for data in .sph and .stm format via the <code>run-scored.sh</code> and <code>run-scored-8k</code> scripts.</p>
+
+<h5>Models</h5>
+
+<p>Also in <code>Makefile.options</code> are paths (in the VM) to the models used for decoding. If you create a new acoustic model (see Language Remodeling below), you will want to change this to point to your new model. A recent update provides models designed for 30ms frame sizes, resulting in much faster decoding.  (3-7x real time, depending on configuration)</p>
+
+<h4>Improving Word Error Rate: rescoring with large LM</h4>
+
+<p>It's possible to get a 2% relative improvement in WER by adding a step to the decoding process, which rescores intermediate lattices with a larger language model (Cantab 4-gram, unpruned). This adds extra time to the decoding process, and requires more memory, so it is commented out of the Vagrantfile by default. But if you have a 16 GB host machine, and the extra time, try it out. The data file <code>rescore-eesen.tgz</code> contains an extra program, the language model, and a patched Makefile.</p>
+
+<pre><code>cd /home/${user}
+wget http://speechkitchen.org/vms/Data/rescore-eesen.tgz
+tar zxvf rescore-eesen.tgz
+rm rescore-eesen.tgz    
+</code></pre>
+
+<h3>Cleaning Up</h3>
+
+<p>Sometimes it helps to know how to shut down, as well as install and run a system. Two use cases come to mind.</p>
+
+<p>Shutting down the virtual machine:</p>
+
+<pre><code>vagrant halt
+</code></pre>
+
+<p>Cleaning files associated with the embedded VirtualBox virtual machine (i.e. wipe everything)</p>
+
+<pre><code>vagrant destroy
+</code></pre>
+
+<p>This will not wipe out any local data or results, only the virtual machine (either VirtualBox locally or the AWS AMI)</p>
+
+<h3>Language Remodeling</h3>
+
+<p>This VM now supports language model building according to instructions at SpeechKitchen.org: <a href="http://speechkitchen.org/kaldi-language-model-building/">Kaldi Language Model Building</a></p>
+
+<h3>Error Analysis</h3>
+
+<p>If you ran the full EESEN TEDLIUM experiment (<code>~/eesen/asr_egs/tedlium/v1</code>), it is possible to use SpeechKitchen.org's <a href="http://speechkitchen.org/error-analysis-instructions-for-tedlium-vm/">Error Analysis Page</a> to produce and view graphs and charts that let you play with the scoring data and visualize it in different ways. (Look near the end for EESEN specifics)</p>
+
+<h3>Tips &amp; Tricks</h3>
+
+<p>You might want to install another useful vagrant plugin such as <a href="https://github.com/dotless-de/vagrant-vbguest">vagrant-vbguest</a> which automatically synchronizes the VirtualBox Guest Additions in the VM</p>
+
+<pre><code>vagrant plugin install vagrant-vbguest
+</code></pre>
+
+<h2>License</h2>
+
+<p>The Eesen software has been released under an Apache 2.0 license, the LIUM speaker diarization is GPL, but LIUM offers to work with you if that is too strict <a href="http://www-lium.univ-lemans.fr/diarization/doku.php/licence">LIUM license</a>. The Eesen transcriber uses and expands the Kaldi offline transcriber, which has been released under a very liberal license at <a href="https://github.com/alumae/kaldi-offline-transcriber/blob/master/LICENSE">Kaldi Offline Transcriber license</a>. The transcriber uses various other tools such as Atlas, Sox, FFMPEG that are being released as Ubuntu packages. Some of these have their own licenses, if one of them poses a problem, it would not be too hard to remove them specifically.</p>

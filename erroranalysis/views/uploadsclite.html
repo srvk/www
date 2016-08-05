@@ -1,0 +1,55 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="http://speechkitchen.org/home/error-analysis-tools/" target="_blank">Substitution Words Error Analysis</a>
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.navbar-inner -->
+</div>
+<!-- /.navbar -->
+
+<div id="dropbox" class="dropbox" ng-class="dropClass">
+    <span>{{dropText}}</span>
+</div>
+<a href="#exampleModal" data-toggle="modal">Example</a>
+<div id="exampleModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">File Example</h3>
+  </div>
+  <div class="modal-body">
+    <p>
+      <div>
+        We are curently supporting file as shown in example. It can be obtained using sclite utility with this command: ./sclite -h ~/sclitetest_hypothesis.txt -r ~/sclitetest_correct.txt -i rm -o dtl
+      </div>
+      <br>
+      <div>
+        <img src="example_substitution.png">
+      </div>
+      <br>
+      <div>
+        <a href="detailfile.dtl" target="_blank">Download</a> example dtl file.
+      </div>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+<div ng-show="files.length">
+    <div ng-repeat="file in files.slice(0)">
+        <span>{{file.webkitRelativePath || file.name}}</span>
+        (<span ng-switch="file.size > 1024*1024">
+            <span ng-switch-when="true">{{file.size / 1024 / 1024 | number:2}} MB</span>
+            <span ng-switch-default="">{{file.size / 1024 | number:2}} kB</span>
+        </span>)
+    </div>
+    <br>
+    <input class="btn pull-right" type="button" ng-click="toSclite()" value="Next">
+</div>

@@ -1,0 +1,59 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="http://speechkitchen.org/home/error-analysis-tools/" target="_blank">Out of Vocabulary Error Analysis</a>
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.navbar-inner -->
+</div>
+<!-- /.navbar -->
+
+
+<div id="dropbox" class="dropbox" ng-class="dropClass">
+    <span>{{dropText}}</span>
+</div>
+<a href="#exampleModal" data-toggle="modal">Example</a>
+<div id="exampleModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Files Example</h3>
+  </div>
+  <div class="modal-body">
+    <p>
+      <div>
+        We are curently supporting files shown as in example. You have to upload 3 files
+        (1) train, (2) test, (3) dictionary. We use these regex to parse filenames /.*train.*/i, /.*test.*/i, /.*(lex|dict).*/i
+      </div>
+      <br>
+      <div>
+        <img src="example_oov.png">
+      </div>
+      <br>
+      <div>
+        Download example <a href="train.txt" target="_blank">train</a>, <a href="test.txt" target="_blank">test</a>, <a href="lexicon.txt" target="_blank">dictionary</a> file.
+      </div>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+<div ng-show="files.length">
+    <div ng-repeat="file in files">
+        <span>{{file.webkitRelativePath || file.name}}</span>
+        (<span ng-switch="file.size > 1024*1024">
+            <span ng-switch-when="true">{{file.size / 1024 / 1024 | number:2}} MB</span>
+            <span ng-switch-default="">{{file.size / 1024 | number:2}} kB</span>
+        </span>)
+    </div>
+    <br>
+    <div ng-show="files.length==3">
+      <input class="btn pull-right" type="button" ng-click="processAndToOov()" value="Next">
+    </div>
+</div>
